@@ -178,7 +178,7 @@ The lm() function is used to fit linear models to data frames in the R Language.
 From when the summary is run, we get to learn that the Pr(>|t|) for Sugars, Protein and Calories are less than 0.005 and very small values meaning that they have a very strong relation to rating as for vitamins, the Pr(>|t|) value is 0.201 which most definitely higher than 0.005 showing it has an unorthodox relation to ratings.
 
 # Conclusions
-For our comclusion, it is important to first summarize the main findings of the study, where we see that there is a clear trend and a significant showcase of Sugar, Protein and Calories having a very strong relation to rating and effect on the trends as emmerged from the data analysis.
+For our conclusion, it is important to first summarize the main findings of the study, where we see that there is a clear trend and a significant showcase of Sugar, Protein and Calories having a very strong relation to rating and effect on the trends as emmerged from the data analysis.
 These results can be extended to larger population in the form of adding more cereals and getting more ratings from other people
 Throughout project flavor, I got to learn more about how to make graphical representations in R and found it hard to get the final linear model.
 To improve the design of my study of the dataset, I will have to find more information points such as average weight of the people that are giving the ratings to further extend this research towards the realm of investigating the nutritional content of different types of cereal, including their fiber, protein, and sugar content, and how these factors may impact health and weight management.
