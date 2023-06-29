@@ -1,0 +1,187 @@
+---
+title: "Project 'Flavor' Notebook"
+author: "Vansh Bataviya"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+# Introduction
+Project "Flavor" primarily uses the data “80 Cereals”, which is a dataset composed of 77 entries with 16 measured variables. The general study of statistics and all that we have learned in STAT 383 this semester allows us to make sense of large amounts of data and draw meaningful conclusions from it. In this project, we will be using statistical methods to analyze a dataset in order to effectively answer and predict a person’s rating for a cereal and test it by looking at the questions enlisted below.
+
+# Background
+The general study of statistics and all that we have learned in STAT 383 this semester allows us to make sense of large amounts of data and draw meaningful conclusions from it. In this project, we will be using statistical methods to analyze a dataset in order to effectively answer and predict a person’s rating for a cereal and test it by looking at the following questions:
+The significance of this study lies in the 80 cereals dataset compiled by Chris Crawford approximately 5 years ago on Kaggle however, it is known that these datasets have been gathered and cleaned up by Petra Isenberg, Pierre Dragicevic, and Yvonne Jansen. 
+Additionally, there are several potential benefits of using this cereal dataset. Some of these include:
+
+* Providing insight into the nutritional content of cereals: A cereal dataset can provide information on the amount of various nutrients, such as carbohydrates, proteins, and fats, contained in different cereal products. This can be useful for people who are trying to make informed decisions about their dietary choices, such as those with specific health conditions or dietary restrictions.
+
+* Supporting the development of new cereal products: By providing information on the nutritional content and other characteristics of existing cereal products, a cereal dataset can be used by manufacturers to develop new products that meet the needs of different consumer groups. For example, a cereal dataset could be used to create cereals that are specifically designed for people with diabetes or other health conditions.
+
+Overall, having a cereal dataset can provide valuable information that can be used to improve public health, support research, and inform decision-making in the food industry with the information that has been graphed on this project.
+
+# Questions that I am going to answer
+* Does the amount of protein have an effect on ratings?
+* Does the amount of sugar of the cereal have an effect on ratings?
+* Does the number of calories in the cereal have an effect on ratings?
+* Does the amount of vitamins in the cereal have an effect on ratings?
+* Can we use all the answers to these questions to predict a person’s rating for a cereal effectively?
+
+
+# Initializing the libraries that are to be used and the data
+
+When working with data in my project, it is often necessary to initialize one or more libraries before beginning your analysis. This is because libraries typically contain pre-written code that provides useful functions and data structures for working with the data. Initializing these libraries allows you to access these functions and data structures that I have used for the project.
+There are a few different steps involved in initializing a library. The first step is to install the library, if it is not already installed on your system. This can typically be done using a package manager or by downloading the library from the internet. Once the library is installed, you will need to solely run my code.
+
+I have used the following libraries:
+```{r}
+library(plyr); library(dplyr)
+library(tidyr)
+library(corrplot)
+library(ggplot2)
+library (tidyverse)
+library(psych)
+library(ggpubr)
+```
+
+## Initializing the reading of the data
+
+On this step, I am assigning cereal as the variable that will hold the .csv file which has the data set for the 80 cereals.
+ 
+```{r}
+cereal <- read.csv("C:/Users/Vansh/Downloads/cereal.csv")
+```
+Doing this assigning will make it easier for us to refer to the dataset with one word rather than using the complete declaration of the read.csv
+From here, we move forward to take a look at how the data looks
+
+## Looking at the data
+
+In this section, we are going to use head to display the first n rows present in the input data frame and colnames to know what column names we are going to be refering to when doing our graph plots.
+```{r}
+head(cereal)
+colnames(cereal)
+```
+
+# Methods/Results
+
+
+To look through our methods and results, we are going to be generating the following diagram representations:
+
+* A correlation plot
+
+* Rating vs Protein
+
+* Rating vs Sugars
+
+* Relationship between Rating vs Calories
+
+* Relationship between Rating vs Sugar
+
+* Box Plot between Rating vs Vitamins
+
+* Linear Model 
+
+The diagrams are shown below.
+
+## Correlation Plot
+I am using the correlation plot as my analysis tool that I plan to bring together correlation coefficients between an x-axis and a y-axis where we find different variables. 
+I am importing calories, protein, fat, sodium, fiber, carbo, sugars, potass, vitamins, shelf, weight, cups, rating and using them to generate a correlation table.
+```{r}
+correlationTable <- cereal %>% 
+select(calories, protein, fat, sodium, fiber, carbo, sugars, potass, vitamins, shelf, weight, cups, rating)
+corre <- cor(correlationTable)
+corPlot(corre, cex = 1)
+```
+The benefits of using this at the start 
+before the individual graphings is:
+* The correlation table makes the absence or presence of a relationship between two variables clear. This makes it more relevant and easier for us to select what data values to compare.
+* The correlation table helps to predict the evolution of the relationship between the variables.
+* The correlation table allows you to have a global view of the more or less strong relationship between several variables.
+* It’s always easier to understand the data when it’s presented in a visual way rather than trial and error to figure out what data values are working and which arent.
+
+# Subset Plot
+```{r}
+cereals_summ <- subset(cereal, select = calories:rating)
+pairs(cereals_summ[,1 :13], pch = 19,lower.panel = NULL)
+```
+Additionally, we take note at the use of subsets and mapping to further get diagrams and plottings that aided us to find what data to use and analyze.
+
+## Graphing Rating vs Protein
+
+```{r}
+plot(cereal$rating~protein,
+     data = cereal,
+     xlab="Protein",
+     ylab="Rating",
+     main="Rating vs Protein",
+     col="blue")
+abline(lm(cereal$rating~cereal$protein), col="red")
+```
+This graphing tells us there is a positive correlation with rating in relation to protein. However, the it is not exact and rather definite.
+
+## Graphing Rating vs Sugars 
+```{r}
+top_sugar <- cereal %>%
+  arrange(desc(cereal$sugars))
+plot(cereal$rating~sugars,
+     data = cereal,
+     xlab="Sugars",
+     ylab="Rating",
+     main="Rating vs Sugars",
+     col="blue")
+abline(lm(cereal$rating~cereal$sugars), col="red")
+```
+This graphing tells us there is a negative correlation with rating in relation to Sugars. This means the higher the amount of sugar in a certain type of cereal, it would correlate to a lower rating.
+Similar to the graph earlier, the it is not exact and rather definite.
+
+## Graphing the relation between rating and calories
+```{r}
+ggplot(data = cereal)+
+  geom_jitter(mapping = aes(x = rating , y = calories))+
+  geom_smooth(mapping= aes(x = rating, y= calories),col="red")+
+  labs(title = "The Relationship between Ratings and Calories")
+```
+Using jitter and smooth line for data and it is to notice that the rating decreases when the amount of calories are high in the box of cereal. The smooth curve tells us that the trend is rather clear after 30 rating that calories negatively affect the rating of the cereal.
+
+## Graphing the relation between the rating and the amount of sugar
+```{r}
+ggplot(data = cereal)+
+  geom_jitter(mapping = aes(x= rating , y =sugars))+
+  geom_smooth(mapping= aes(x= rating, y= sugars),col="red")+
+  labs(title = "The Relationship between Ratings and Sugar")
+```
+We use the Jitter and smooth line for data for the second time in this dataset and it is to notice that the rating decreases when the amount of sugar is high in the box of cereal. The curve tells us that the trend is rather clear that  amount of sugar exponentially negatively affects the rating of the cereal.
+
+## Box Plot of the relation between rating and vitamins
+```{r}
+boxplot(cereal$rating~vitamins,
+        data = cereal,
+        xlab="Vitamins",
+        ylab="Ratings",
+        main="Rating vs Vitamins",
+        col=c("yellow","red","green"))
+top_sugar <- cereal %>%
+  arrange(desc(cereal$sugars))
+```
+We use the boxplot here to see that 0 vitamin has the median rating >60, 25 vitamin had a median rating of approximately 40 and when there was 100 vitamin, we saw a lower median rating than what it was when it was 25 vitamin.
+
+Before we conclude and move to the linear model, we should take note and make notice of an assumption. As per the data, Quaker Oatmeal has -1 grams of sugar, which is not possible at any circumstance.
+
+## Linear Model: Rating per Explanatories
+```{r}
+x <- lm(rating ~ sugars+protein+calories+vitamins, data = cereal)
+summary(x)
+plot(x)
+```
+The lm() function is used to fit linear models to data frames in the R Language. It can be used to carry out regression and analysis of covariance to predict the value corresponding to data that is not in the data frame for our data.
+From when the summary is run, we get to learn that the Pr(>|t|) for Sugars, Protein and Calories are less than 0.005 and very small values meaning that they have a very strong relation to rating as for vitamins, the Pr(>|t|) value is 0.201 which most definitely higher than 0.005 showing it has an unorthodox relation to ratings.
+
+# Conclusions
+For our comclusion, it is important to first summarize the main findings of the study, where we see that there is a clear trend and a significant showcase of Sugar, Protein and Calories having a very strong relation to rating and effect on the trends as emmerged from the data analysis.
+These results can be extended to larger population in the form of adding more cereals and getting more ratings from other people
+Throughout project flavor, I got to learn more about how to make graphical representations in R and found it hard to get the final linear model.
+To improve the design of my study of the dataset, I will have to find more information points such as average weight of the people that are giving the ratings to further extend this research towards the realm of investigating the nutritional content of different types of cereal, including their fiber, protein, and sugar content, and how these factors may impact health and weight management.
+
+# References
+“80 Cereals.” Kaggle, 24 Oct. 2017, https://www.kaggle.com/datasets/crawford/80-cereals?search=cereal.
