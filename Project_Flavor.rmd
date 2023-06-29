@@ -98,7 +98,7 @@ before the individual graphings is:
 * The correlation table makes the absence or presence of a relationship between two variables clear. This makes it more relevant and easier for us to select what data values to compare.
 * The correlation table helps to predict the evolution of the relationship between the variables.
 * The correlation table allows you to have a global view of the more or less strong relationship between several variables.
-* It’s always easier to understand the data when it’s presented in a visual way rather than trial and error to figure out what data values are working and which arent.
+* It’s always easier to understand the data when it’s presented in a visual way rather than trial and error to figure out what data values are working and those that have no relation between each other.
 
 # Subset Plot
 ```{r}
